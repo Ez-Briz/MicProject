@@ -10,5 +10,6 @@ namespace API.Interfaces
     {
         Task<AppUser> GetUserByUnpAsync(string unp);
         Task<bool> AddUserAsync(AppUser user);
+        Task<List<AppUser>> GetAllUsers();
     }
 }

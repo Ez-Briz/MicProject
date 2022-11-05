@@ -24,6 +24,11 @@ namespace API.Services
             return await SaveAsync();
         }
 
+        public async Task<List<AppUser>> GetAllUsers()
+        {
+            return await _context.Users.ToListAsync();
+        }
+
         public async Task<AppUser> GetUserByUnpAsync(string unp)
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.Unp == unp);

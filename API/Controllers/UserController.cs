@@ -27,11 +27,17 @@ namespace API.Controllers
             return result ? Ok(result) : BadRequest();
         }
 
-        [HttpGet]
+        [HttpGet("{unp}")]
         public async Task<IActionResult> GetUser(string unp)
         {
             var user = await _userService.GetUserByUnpAsync(unp);
             return user != null ? Ok(user) : BadRequest(); 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUsers()
+        {
+            return Ok(await _userService.GetAllUsers());
         }
     }
 }

@@ -16,6 +16,10 @@ builder.Services.AddDbContext<AppDbContext>(options => {
     options.UseSqlite(builder.Configuration.GetConnectionString("Default Connection"));
 });
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddSingleton<IScheduleService, ScheduleService>();
+builder.Services.AddScoped<IInfoService, InfoService>();
+builder.Services.AddHostedService<BackgroundWorker>();
 
 var app = builder.Build();
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using API.Data;
 using API.Entity;
 using API.Interfaces;
+using API.Services;
 using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,16 +21,18 @@ public class InfoController : ControllerBase
 {
 
     private readonly IUserService _userService;
+    private readonly IInfoService _infoService;
 
-    public InfoController(IUserService userService)
+    public InfoController(IUserService userService, IInfoService infoService)
     {
         _userService = userService;
+        _infoService = infoService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetInfo(string unp)
     {
-        Info info = await GetInfoFromPortal(unp);
+        Info info = await _infoService.GetInfoFromPortal(unp);
         if (info == null)
             return BadRequest("Unp not found!");
 
@@ -37,7 +40,7 @@ public class InfoController : ControllerBase
         if (user == null)
             return BadRequest("User not found!");
         
-        if (user.LastStatus != info.Row.Ckodsost)
+        if (user.LastStatus != info.Row.Ckodsost) // change with infoService
         {
             user.LastStatus = info.Row.Ckodsost;
             return Ok(user.LastStatus); // plug
@@ -45,19 +48,4 @@ public class InfoController : ControllerBase
         return Ok(info);
     }
 
-    static private async Task<Info> GetInfoFromPortal(string unp)
-    {
-        HttpClient client = new()
-        {
-            BaseAddress = new Uri("http://www.portal.nalog.gov.by/grp/")
-        };
-        string request = $"getData?unp={unp}&charset=UTF-8&type=json";
-        var response = await client.GetAsync(request);
-        if (!response.IsSuccessStatusCode)
-            return null;
-
-        var responseMessage = await response.Content.ReadAsStringAsync();
-        var info = JsonConvert.DeserializeObject<Info>(responseMessage);
-        return info;
-    }
 }
