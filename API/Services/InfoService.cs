@@ -20,8 +20,8 @@ namespace API.Services
         public Task<bool> CheckStatus(AppUser user, string newStatus)
         {
             var result = user.LastStatus != newStatus;
-            if (!result)
-                user.LastStatus = newStatus; 
+            if (result)
+                user.LastStatus = newStatus;
             return Task.FromResult(result);
         }
 

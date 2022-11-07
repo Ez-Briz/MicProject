@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using API.Entity;
 using API.Interfaces;
@@ -14,6 +15,7 @@ namespace API.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        Regex reg = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
 
         public UserController(IUserService userService)
         {
@@ -23,6 +25,8 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(string unp, string email)
         {
+            if (unp.Length <= 6 || !reg.Match(email).Success)
+                return BadRequest("Email/Unp is invalid");
             var result = await _userService.AddUserAsync(new AppUser(unp, email));
             return result ? Ok(result) : BadRequest();
         }
