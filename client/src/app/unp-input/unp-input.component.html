@@ -1,0 +1,29 @@
+<div class="container" [formGroup]="form">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col" width="50%">Unp</th>
+        <th scope="col" width="25%">API db</th>
+        <th scope="col">Local db</th>
+      </tr>
+    </thead>
+    <tbody formArrayName="unps">
+        <tr class="mb-2 align-items-center" *ngFor="let unp of unps.controls; index as i">
+          <td>
+            <input class="form-control" [formControlName]="i">
+          </td>
+          <td>
+            <label id="nalogdb" [textContent]="nalogdbstatus"></label>
+          </td>
+          <td>
+            <label id="localdb" [textContent]="localdbstatus"></label>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  <div class="input-group mb-3">
+    <button class="btn btn-primary" type="button" (click)="addUnp()">Add unp</button>
+    <button class="btn btn-danger" type="button" (click)="removeUnp()">Remove unp</button>
+  </div>
+  <button class="btn btn-success" (click)="checkStatus()">Check status</button>
+</div>
