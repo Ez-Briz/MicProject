@@ -23,22 +23,22 @@ export class RegisterComponent implements OnInit {
   register(unp: string, email: string) {
     this.model = {unp, email};
     this.postUser(this.model).subscribe((response: any) => {
-      console.log("Posted!");
       if (response) {
         this.toast.success("Successful registration!");
       }
       else {
         this.toast.error("Something went wrong!");
       }
+      },
+      error => {
+        this.toast.error(error.error, error.status);
       });
   }
 
   postUser (model: any) {
-    console.log("posting");
     let params = new HttpParams();
     params = params.append('unp', model.unp);
     params = params.append('email', model.email);
-    console.log(this.baseUrl+"user");
     return this.http.post(this.baseUrl + "user", params);
   }
 }
