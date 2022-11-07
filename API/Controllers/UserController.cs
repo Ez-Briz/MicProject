@@ -25,7 +25,9 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(string unp, string email)
         {
-            if (unp.Length <= 6 || !reg.Match(email).Success)
+            if (unp == null || email == null)
+                return BadRequest();
+            if (unp?.Length <= 6 || !reg.Match(email).Success)
                 return BadRequest("Email/Unp is invalid");
             var result = await _userService.AddUserAsync(new AppUser(unp, email));
             return result ? Ok(result) : BadRequest();
